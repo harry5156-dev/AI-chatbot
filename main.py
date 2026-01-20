@@ -64,11 +64,15 @@ class ChatResponse(BaseModel):
 # In-memory conversation storage (in production, use a database)
 conversations = {}
 
+# Get the directory where main.py is located
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+
 
 @app.get("/")
 async def read_root():
     """Serve the main chatbot interface"""
-    return FileResponse("static/index.html")
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
 
 
 @app.get("/health")
@@ -159,8 +163,8 @@ async def clear_conversation(session_id: str):
     raise HTTPException(status_code=404, detail="Session not found")
 
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files - must be at the end after all routes
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 if __name__ == "__main__":
