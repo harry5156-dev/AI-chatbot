@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - HOST=0.0.0.0
+      - PORT=8000
+      - MODEL_NAME=claude-3-5-sonnet-20241022
+      - MAX_TOKENS=4096
+      - TEMPERATURE=0.7
+    env_file:
+      - .env
+    restart: unless-stopped
